@@ -1,20 +1,8 @@
 #!/usr/bin/env python3
 # Get data from IUCN API v. 3
-import requests
 import pandas as pd
 import urllib.parse as urlparse
-
-class APIRequests:
-    def __init__(self,endpoint):
-        self._endpoint = endpoint #the API endpoint
-
-    def _get(self,sublevels=None,payload=None):
-        #basic method to validate GET requests.
-        try:
-            return requests.get(self._endpoint+sublevels,params=payload)
-        except:
-            print("An error occurred during the request, check the internet connection and the URL variables.")
-            return False
+from utils.api import APIRequests
 
 class IUCN(APIRequests):
     def __init__(self,token):
@@ -74,7 +62,7 @@ class IUCN(APIRequests):
                     if req:
                         count = int(req.json()["count"])
                         if count > 0:
-                            df = pd.concat(df, pd.DataFrame(req.json()["result"]))
+                            df = pd.concat([df, pd.DataFrame(req.json()["result"])])
                     else:
                         count = 0
                     page += 1
